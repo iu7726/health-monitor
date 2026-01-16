@@ -1,6 +1,6 @@
 {
   "name": "@mh.js/health-monitor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lightweight health check and event loop monitoring detection library for Node.js. Supports custom indicators and TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,5 +33,13 @@
   "devDependencies": {
     "@types/node": "^25.0.9",
     "typescript": "^5.9.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iu7726/health-monitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iu7726/health-monitor/issues"
+  },
+  "homepage": "https://github.com/iu7726/health-monitor#readme"
 }
