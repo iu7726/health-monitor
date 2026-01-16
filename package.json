@@ -1,0 +1,37 @@
+{
+  "name": "@mh.js/health-monitor",
+  "version": "1.0.0",
+  "description": "Lightweight health check and event loop monitoring detection library for Node.js. Supports custom indicators and TypeScript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "health-check",
+    "health-monitor",
+    "event-loop",
+    "event-loop-lag",
+    "lag-detection",
+    "monitoring",
+    "heartbeat",
+    "typescript",
+    "performance",
+    "nodejs"
+  ],
+  "author": "mh.js",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "typescript": "^5.9.3"
+  }
+}
