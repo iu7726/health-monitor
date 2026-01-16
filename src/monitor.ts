@@ -1,6 +1,18 @@
 import { performance } from 'perf_hooks';
 import type { HealthIndicator, HealthStatus, MonitorConfig } from './types';
 
+/**
+ * HealthMonitor class for monitoring system health and event loop lag.
+ * 
+ * @example
+ * ```typescript
+ * const monitor = new HealthMonitor({ interval: 3000 });
+ * monitor.register({
+ *   name: 'db',
+ *   check: async () => await db.ping()
+ * }).start();
+ * ```
+ */
 export class HealthMonitor {
   private indicators: HealthIndicator[] = [];
   private intervalId: NodeJS.Timeout | null = null;
@@ -15,6 +27,10 @@ export class HealthMonitor {
     timestamp: Date.now(),
   };
 
+  /**
+   * Creates a new HealthMonitor instance.
+   * @param config - Configuration options for the monitor.
+   */
   constructor(config?: MonitorConfig) {
     this.config = {
       interval: config?.interval ?? 3000,
@@ -22,11 +38,20 @@ export class HealthMonitor {
     };
   }
 
+  /**
+   * Registers a new health indicator to be monitored.
+   * @param indicator - The health indicator configuration.
+   * @returns The HealthMonitor instance for method chaining.
+   */
   register(indicator: HealthIndicator) {
     this.indicators.push(indicator);
     return this;
   }
 
+  /**
+   * Starts the periodic health check loop.
+   * If the monitor is already running, this method does nothing.
+   */
   start() {
     if (this.intervalId) return;
     this.check();
@@ -34,6 +59,9 @@ export class HealthMonitor {
     this.intervalId.unref(); 
   }
 
+  /**
+   * Stops the health check loop.
+   */
   stop() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -41,6 +69,14 @@ export class HealthMonitor {
     }
   }
 
+  /**
+   * Retrieves the current health status of the system.
+   * 
+   * If the health check loop is stalled (not updated for > 3x interval),
+   * it returns a 'down' status with a system error.
+   * 
+   * @returns The current HealthStatus object.
+   */
   getStatus(): HealthStatus {
     const now = Date.now();
     const isStale = (now - this.latestStatus.timestamp) > (this.config.interval * 3);
