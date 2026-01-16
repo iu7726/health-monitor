@@ -1,6 +1,6 @@
 {
   "name": "@mh.js/health-monitor",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight health check and event loop monitoring detection library for Node.js. Supports custom indicators and TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
