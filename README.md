@@ -1,3 +1,8 @@
+![NPM Version](https://img.shields.io/npm/v/@mh.js/health-monitor?style=flat-square)
+![License](https://img.shields.io/npm/l/@mh.js/health-monitor?style=flat-square)
+![Downloads](https://img.shields.io/npm/dm/@mh.js/health-monitor?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square&logo=typescript)
+
 # Health Monitor
 
 A lightweight health check and event loop monitoring library for Node.js applications.
@@ -70,6 +75,60 @@ monitor.register({
     if (!response.ok) throw new Error("API Unreachable");
   },
 });
+```
+
+### NestJS Configuration
+
+```typescript
+// health.module.ts
+import { Module } from "@nestjs/common";
+import { HealthService } from "./health.service";
+import { HealthMonitor } from "@mh.js/health-monitor";
+
+@Module({
+  providers: [
+    HealthService,
+    {
+      provide: "HEALTH_MONITOR",
+      useFactory: () => {
+        return new HealthMonitor({
+          interval: 3000,
+          timeout: 1000,
+        });
+      },
+    },
+  ],
+  exports: [HealthService],
+})
+export class HealthServiceModule {}
+
+// health.service.ts
+import { Injectable } from "@nestjs/common";
+import { HealthMonitor } from "@mh.js/health-monitor";
+
+@Injectable()
+export class HealthService {
+  constructor(
+    @Inject("HEALTH_MONITOR") private readonly monitor: HealthMonitor
+  ) {}
+
+  onModuleInit() {
+    // TODO: register indicators
+    this.monitor.register({
+      name: "database",
+      check: async () => {
+        // Perform actual DB ping logic
+        // await this.dataSource.query('SELECT 1');
+      },
+      timeout: 500, // Individual timeout setting
+    });
+    this.monitor.start();
+  }
+
+  onModuleDestroy() {
+    this.monitor.stop();
+  }
+}
 ```
 
 ## API
@@ -190,6 +249,60 @@ monitor.register({
     if (!response.ok) throw new Error("API Unreachable");
   },
 });
+```
+
+### NestJS 설정
+
+```typescript
+// health.module.ts
+import { Module } from "@nestjs/common";
+import { HealthService } from "./health.service";
+import { HealthMonitor } from "@mh.js/health-monitor";
+
+@Module({
+  providers: [
+    HealthService,
+    {
+      provide: "HEALTH_MONITOR",
+      useFactory: () => {
+        return new HealthMonitor({
+          interval: 3000,
+          timeout: 1000,
+        });
+      },
+    },
+  ],
+  exports: [HealthService],
+})
+export class HealthServiceModule {}
+
+// health.service.ts
+import { Injectable } from "@nestjs/common";
+import { HealthMonitor } from "@mh.js/health-monitor";
+
+@Injectable()
+export class HealthService {
+  constructor(
+    @Inject("HEALTH_MONITOR") private readonly monitor: HealthMonitor
+  ) {}
+
+  onModuleInit() {
+    // TODO: register indicators
+    this.monitor.register({
+      name: "database",
+      check: async () => {
+        // Perform actual DB ping logic
+        // await this.dataSource.query('SELECT 1');
+      },
+      timeout: 500, // Individual timeout setting
+    });
+    this.monitor.start();
+  }
+
+  onModuleDestroy() {
+    this.monitor.stop();
+  }
+}
 ```
 
 ## API
