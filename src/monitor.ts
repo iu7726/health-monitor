@@ -84,7 +84,7 @@ export class HealthMonitor {
     if (isStale) {
       return { 
         status: 'down', 
-        lag: 0,
+        lag: now - this.latestStatus.timestamp,
         details: {
           system: { 
             status: 'down',
@@ -134,7 +134,6 @@ export class HealthMonitor {
       });
 
       await Promise.allSettled(checkPromises);
-
       this.latestStatus = {
         status: isAllUp ? 'ok' : 'down',
         lag,
