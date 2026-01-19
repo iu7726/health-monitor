@@ -175,6 +175,11 @@ interface HealthStatus {
 }
 ```
 
+#### Field Descriptions
+
+- **lag**: Indicates the delay in the event loop in milliseconds. High lag suggests the main thread is busy.
+- **stalled detection**: If the health check loop stops updating for more than 3x the configured `interval` (potentially due to severe event loop blocking), the monitor automatically reports a `down` status with `Health check loop is stalled`.
+
 ---
 
 # Health Monitor (Korean)
@@ -348,3 +353,8 @@ interface HealthStatus {
   timestamp: number; // 마지막 체크 시간
 }
 ```
+
+#### 필드 설명
+
+- **lag**: 이벤트 루프 지연 시간(ms)을 나타냅니다. 이 값이 높으면 메인 스레드가 차단된(busy) 상태일 수 있습니다.
+- **루프 정지 감지 (Stalled Detection)**: 헬스 체크 루프가 설정된 `interval`의 3배 이상 시간 동안 업데이트되지 않으면(심각한 이벤트 루프 지연 등으로 인해), 모니터는 `Health check loop is stalled` 에러와 함께 자동으로 `down` 상태를 반환합니다.
